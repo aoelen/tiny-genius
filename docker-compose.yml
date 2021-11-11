@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+    tinygenius_api:
+        build: .
+        ports:
+            - 0.0.0.0:10231:5001
+        volumes:
+            - ./:/app
+        networks:
+            - backend
+
+    mongodb_container:
+        image: mongo:latest
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: rootpassword
+        ports:
+            - 0.0.0.0:10232:27017
+        volumes:
+            - ./db:/data/db
+        networks:
+            - backend
+
+    mongo-seed:
+        profiles:
+            - seed
+        build: ./mongo-seed
+        links:
+            - mongodb_container
+        depends_on:
+            - 'mongodb_container'
+        networks:
+            - backend
+
+networks:
+    backend:
+        external:
+            name: orkg-backend_backend

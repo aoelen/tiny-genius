@@ -17,15 +17,24 @@ def make_pool(run_tool, tool_name, overwrite=False, threads=1, field=".*"):
     print(f'Start running {tool_name}, on {threads} threads')
 
     start = time.time()
-    filter = {
-        f"nlp_results.{tool_name}": { "$exists": overwrite },
-        "categories": { "$regex" : field }
-    }
+    process_papers = True
 
-    papers = list(collection_papers.find(filter).limit(5))
-    pool = mp.Pool(threads)
-    pool.map(run_tool, papers)
-    pool.close()
+    while process_papers:
+        print('Creating new batches...')
+        filter = {
+            f"nlp_results.{tool_name}": { "$exists": overwrite },
+            "categories": { "$regex" : field }
+        }
+
+        papers = list(collection_papers.find(filter).limit(10000))
+        if len(papers) == 0:
+            process_papers = False
+            break
+
+        pool = mp.Pool(threads)
+        pool.map(run_tool, papers)
+        pool.close()
+    
     end = time.time()
 
     print('Finished, time elapsed:', end - start)

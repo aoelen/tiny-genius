@@ -1,10 +1,12 @@
 Flask==1.1.2
 pymongo==3.11.4
 requests==2.25.1
-#tensorflow
-#transformers==4.5.1
-#spacy
+tensorflow
+transformers==4.5.1
+spacy
 flask_cors
 wheel
 gensim
 cso_classifier
+sparqlwrapper
+python-slugify

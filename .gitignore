@@ -142,3 +142,5 @@ db/
 
 # Seed file
 mongo-seed/arxiv.json
+
+nohup.out

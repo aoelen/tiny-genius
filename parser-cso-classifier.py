@@ -8,15 +8,15 @@ cc = CSOClassifier(
     fast_classification=True,
 )
 
-def run_cso_classifier(paper):
+def run_cso_classifier(paper, is_last_run):
     result = cc.run({"title": paper['title'], "abstract": paper['abstract']})
-    save_nlp_statements(paper["id"], 'cso-classifier', result)
+    save_nlp_statements(paper["id"], 'cso_classifier', result, is_last_run)
 
 if __name__ == "__main__":
     make_pool(
         run_tool=run_cso_classifier, 
-        tool_name='cso-classifier', 
+        tool_name='cso_classifier', 
         overwrite=False, 
-        threads=1, 
-        field=".*cs.*"
+        threads=25,
+        field=".*cs.LG.*"
     )
